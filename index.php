@@ -24,7 +24,16 @@
             if ($stmt->rowCount() > 0) {
                 echo "<ul>";
                 foreach ($stmt as $lista) {
-                    echo "<li>" . $lista["codigo"] . " - " . $lista["nome"] . "</li>";
+                    echo "<li>" . $lista["codigo"] . " - " . $lista["nome"];
+                    //criando botão alterar
+                    $botao = "<button id='alterar' name='alterar' onclick='redirecionar(\"alterarlista.php?codigo=%u&nome=%s\")'>Alterar</button>";
+                    $botao = sprintf($botao,$lista["codigo"],htmlspecialchars($lista["nome"]));
+                    echo "&nbsp".$botao;
+                    //criando botão excluir
+                    $botao = "<button id='excluir' name='excluir' onclick='confirmaexcluir(%u,\"%s\")'>Excluir</button>";
+                    $botao = sprintf($botao,$lista["codigo"],htmlspecialchars($lista["nome"]));
+                    echo "&nbsp".$botao;
+                    echo "</li>";
                 }
                 echo "</ul>";
             } else {
