@@ -14,13 +14,25 @@
             <h1>Lista de Compras</h1>
             <nav>
                 <button onclick="redirecionar('incluirlista.php')">Nova Lista</button>
+                <br>
+                <br>
+                <form action="index.php" method="GET">
+                    <input type="text" id="busca" name="busca">
+                    <button type="submit">Buscar</button>
+                </form>
             </nav>
         </header>
         <article>
             <?php
             require_once("conexao.php");
-            $stmt = $conn->prepare("SELECT * FROM lista");
-            $stmt->execute();
+            $busca = "%%";
+            $par = ["codigo" => "", "nome" => "%%"];
+            if (isset($_GET["busca"])) {
+                $busca = "%".$_GET["busca"]."%";
+                $par = ["codigo" => $_GET["busca"], "nome" => $busca];
+            }
+            $stmt = $conn->prepare("SELECT * FROM lista WHERE codigo = :codigo OR nome like :nome");
+            $stmt->execute($par);
             if ($stmt->rowCount() > 0) {
                 echo "<ul>";
                 foreach ($stmt as $lista) {
@@ -28,11 +40,11 @@
                     //criando botão alterar
                     $botao = "<button id='alterar' name='alterar' onclick='redirecionar(\"alterarlista.php?codigo=%u&nome=%s\")'>Alterar</button>";
                     $botao = sprintf($botao,$lista["codigo"],htmlspecialchars($lista["nome"]));
-                    echo "&nbsp".$botao;
+                    echo "&nbsp;".$botao;
                     //criando botão excluir
                     $botao = "<button id='excluir' name='excluir' onclick='confirmaexcluir(%u,\"%s\")'>Excluir</button>";
                     $botao = sprintf($botao,$lista["codigo"],htmlspecialchars($lista["nome"]));
-                    echo "&nbsp".$botao;
+                    echo "&nbsp;".$botao;
                     echo "</li>";
                 }
                 echo "</ul>";
