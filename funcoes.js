@@ -1,6 +1,6 @@
-function confirmaexcluir(codigo,nome) {
+function confirmaexcluir(destino,codigo,nome) {
     if (window.confirm("Confirma exclusão lista: "+codigo+" - "+nome)) {
-       redirecionar("excluirlista.php?codigo="+codigo); 
+       redirecionar(destino+"?codigo="+codigo); 
     } 
 }
 
